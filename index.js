@@ -23,12 +23,16 @@ const log = setupLog();
 AccountRoutes('/account', router, log);
 
 //basic routes
-router.get('/login', function (req,res){
+router.post('/login', function (req,res){
     if (req.body.user == 'joao' && req.body.pwd == '1234'){
         const id = 1;
         const token = jwt.sign({id}, secretKey, { expiresIn : 3600 });
+        res.json(token);
     } 
-    res.json(token);
+    else{
+        res.status(401).send();
+    }
+    
 });
 
 router.get('/', async (req, res, next) => {
