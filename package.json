@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "my-bank-api",
   "version": "1.0.0",
   "description": "API Exemplo Curso de Pós-Graduação IGTI",
@@ -10,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "cors": "^2.8.5",
+    "jwt": "^0.2.0",
     "winston": "^3.3.3"
-  }
+  }  
 }

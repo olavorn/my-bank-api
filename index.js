@@ -1,32 +1,35 @@
 
 
-const express = require('express');
-const winston = require('winston');
 
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import cors from 'cors';
+import { setupLog } from './utils.js';
+
+import { AccountRoutes } from './account.js';
+
+const secretKey = "SecRETKey";
 const port = 3000;
 const app = express();
-
+app.use(express.json());
+app.use(cors());
 var router = express.Router();
+app.use(router);
 
-const log = winston.createLogger({
-    level: 'info',
-    format: winston.format.simple(),
-    defaultMeta: { service: 'user-service' },
-    transports: [
-      //
-      // - Write all logs with level `error` and below to `error.log`
-      // - Write all logs with level `info` and below to `combined.log`
-      //
-      new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-      new winston.transports.File({ filename: 'logs/combined.log' }),
-    ],
-  });
+//log
+const log = setupLog();
 
-if (process.env.NODE_ENV !== 'production') {
-    log.info(new winston.transports.Console({
-        format: winston.format.simple(),
-    }));
-}
+//account routes
+AccountRoutes('/account', router, log);
+
+//basic routes
+router.get('/login', function (req,res){
+    if (req.body.user == 'joao' && req.body.pwd == '1234'){
+        const id = 1;
+        const token = jwt.sign({id}, secretKey, { expiresIn : 3600 });
+    } 
+    res.json(token);
+});
 
 router.get('/', async (req, res, next) => {
     try{
@@ -49,8 +52,9 @@ router.get('/goError', async (req, res, next) => {
     }
 });
 
-app.use(router);
-
 app.listen(port, () => {
     console.log('Curso do IGTI');
 });
+
+
+
